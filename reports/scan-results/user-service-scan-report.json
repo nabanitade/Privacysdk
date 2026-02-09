@@ -1,0 +1,170 @@
+{
+  "scanMetadata": {
+    "filePath": "reports/sample-files/user-service.js",
+    "language": "javascript",
+    "scanTimestamp": "2024-01-15T10:30:00Z",
+    "toolVersion": "1.0.0",
+    "totalVulnerabilities": 12,
+    "criticalVulnerabilities": 8,
+    "highVulnerabilities": 3,
+    "mediumVulnerabilities": 1
+  },
+  "vulnerabilities": [
+    {
+      "rule": "PiiRule",
+      "severity": "CRITICAL",
+      "line": 7,
+      "column": 25,
+      "message": "Hardcoded API key detected: sk_live_1234567890abcdefghijklmnopqrstuvwxyz",
+      "description": "API keys should be stored in environment variables or secure configuration management systems, not hardcoded in source code.",
+      "recommendation": "Move API keys to environment variables or use a secrets management service.",
+      "match": "sk_live_1234567890abcdefghijklmnopqrstuvwxyz",
+      "category": "SECRETS_EXPOSURE"
+    },
+    {
+      "rule": "PiiRule",
+      "severity": "CRITICAL",
+      "line": 8,
+      "column": 25,
+      "message": "Hardcoded database password detected: super_secret_password_123",
+      "description": "Database credentials should not be hardcoded in source code as they can be easily exposed.",
+      "recommendation": "Use environment variables or a secure configuration management system for database credentials.",
+      "match": "super_secret_password_123",
+      "category": "SECRETS_EXPOSURE"
+    },
+    {
+      "rule": "PiiRule",
+      "severity": "CRITICAL",
+      "line": 9,
+      "column": 20,
+      "message": "Hardcoded JWT secret detected: my_jwt_secret_key_that_should_not_be_hardcoded",
+      "description": "JWT secrets should be stored securely and not hardcoded in source code.",
+      "recommendation": "Use environment variables or a secure key management service for JWT secrets.",
+      "match": "my_jwt_secret_key_that_should_not_be_hardcoded",
+      "category": "SECRETS_EXPOSURE"
+    },
+    {
+      "rule": "PiiRule",
+      "severity": "CRITICAL",
+      "line": 12,
+      "column": 25,
+      "message": "Hardcoded email address detected: admin@company.com",
+      "description": "Email addresses should not be hardcoded in source code as they can be used for phishing attacks.",
+      "recommendation": "Use configuration files or environment variables for email addresses.",
+      "match": "admin@company.com",
+      "category": "PII_EXPOSURE"
+    },
+    {
+      "rule": "PiiRule",
+      "severity": "CRITICAL",
+      "line": 13,
+      "column": 25,
+      "message": "Hardcoded phone number detected: 555-123-4567",
+      "description": "Phone numbers should not be hardcoded in source code as they can be used for social engineering attacks.",
+      "recommendation": "Use configuration files or environment variables for phone numbers.",
+      "match": "555-123-4567",
+      "category": "PII_EXPOSURE"
+    },
+    {
+      "rule": "PiiRule",
+      "severity": "CRITICAL",
+      "line": 14,
+      "column": 30,
+      "message": "Hardcoded SSN detected: 123-45-6789",
+      "description": "Social Security Numbers should never be hardcoded in source code as they are highly sensitive PII.",
+      "recommendation": "Remove hardcoded SSNs and use secure data storage with proper encryption.",
+      "match": "123-45-6789",
+      "category": "PII_EXPOSURE"
+    },
+    {
+      "rule": "DataFlowRule",
+      "severity": "CRITICAL",
+      "line": 25,
+      "column": 9,
+      "message": "Sensitive data (SSN) being logged to console",
+      "description": "Logging sensitive data like SSNs can lead to data breaches and compliance violations.",
+      "recommendation": "Remove or mask sensitive data in logs. Use structured logging with data classification.",
+      "match": "console.log(\"User SSN:\", userData.ssn)",
+      "category": "DATA_EXPOSURE"
+    },
+    {
+      "rule": "DataFlowRule",
+      "severity": "CRITICAL",
+      "line": 35,
+      "column": 9,
+      "message": "Sensitive user data being written to log file without encryption",
+      "description": "Writing sensitive data to unencrypted log files creates a security risk.",
+      "recommendation": "Encrypt log files or avoid logging sensitive data altogether.",
+      "match": "this.writeToLog(logEntry)",
+      "category": "DATA_EXPOSURE"
+    },
+    {
+      "rule": "DataFlowRule",
+      "severity": "HIGH",
+      "line": 50,
+      "column": 17,
+      "message": "Exposing SSN in API response without masking",
+      "description": "SSNs should be masked or excluded from API responses to prevent data exposure.",
+      "recommendation": "Mask SSNs (e.g., ***-**-6789) or exclude them from responses unless absolutely necessary.",
+      "match": "ssn: user.ssn",
+      "category": "DATA_EXPOSURE"
+    },
+    {
+      "rule": "DataFlowRule",
+      "severity": "HIGH",
+      "line": 53,
+      "column": 17,
+      "message": "Exposing credit card data in API response",
+      "description": "Credit card information should never be exposed in API responses.",
+      "recommendation": "Remove credit card data from responses or use tokenization.",
+      "match": "creditCard: user.creditCard",
+      "category": "DATA_EXPOSURE"
+    },
+    {
+      "rule": "EncryptionRule",
+      "severity": "HIGH",
+      "line": 60,
+      "column": 9,
+      "message": "Using deprecated and weak encryption algorithm (aes-128-ecb)",
+      "description": "AES-128-ECB is deprecated and vulnerable to various attacks. It should not be used for sensitive data.",
+      "recommendation": "Use AES-256-GCM or ChaCha20-Poly1305 for encryption with proper key management.",
+      "match": "crypto.createCipher('aes-128-ecb', JWT_SECRET)",
+      "category": "WEAK_ENCRYPTION"
+    },
+    {
+      "rule": "DataFlowRule",
+      "severity": "MEDIUM",
+      "line": 67,
+      "column": 9,
+      "message": "Potential SQL injection vulnerability in query construction",
+      "description": "String concatenation in SQL queries can lead to SQL injection attacks.",
+      "recommendation": "Use parameterized queries or prepared statements to prevent SQL injection.",
+      "match": "const query = `SELECT * FROM users WHERE email = '${email}'`",
+      "category": "SQL_INJECTION"
+    }
+  ],
+  "summary": {
+    "totalIssues": 12,
+    "criticalIssues": 8,
+    "highIssues": 3,
+    "mediumIssues": 1,
+    "lowIssues": 0,
+    "complianceViolations": [
+      "GDPR Article 32 - Security of processing",
+      "CCPA Section 1798.100 - General duties of businesses",
+      "HIPAA Security Rule - Administrative safeguards"
+    ],
+    "riskScore": 9.2,
+    "riskLevel": "CRITICAL"
+  },
+  "recommendations": [
+    "Immediately remove all hardcoded secrets and credentials",
+    "Implement proper secrets management using environment variables or a vault service",
+    "Remove or mask all PII from logs and console output",
+    "Implement proper data encryption for sensitive information",
+    "Use parameterized queries to prevent SQL injection",
+    "Review and update encryption algorithms to use modern, secure standards",
+    "Implement proper access controls for sensitive data",
+    "Conduct a comprehensive security audit of the application"
+  ]
+} 

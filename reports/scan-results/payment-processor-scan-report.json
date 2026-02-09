@@ -1,0 +1,207 @@
+{
+  "scanMetadata": {
+    "filePath": "reports/sample-files/payment-processor.py",
+    "language": "python",
+    "scanTimestamp": "2024-01-15T10:35:00Z",
+    "toolVersion": "1.0.0",
+    "totalVulnerabilities": 15,
+    "criticalVulnerabilities": 10,
+    "highVulnerabilities": 4,
+    "mediumVulnerabilities": 1
+  },
+  "vulnerabilities": [
+    {
+      "rule": "PiiRule",
+      "severity": "CRITICAL",
+      "line": 9,
+      "column": 20,
+      "message": "Hardcoded AWS access key detected: AKIAIOSFODNN7EXAMPLE",
+      "description": "AWS access keys should never be hardcoded in source code as they provide access to cloud resources.",
+      "recommendation": "Use AWS IAM roles, environment variables, or AWS Secrets Manager for credential management.",
+      "match": "AKIAIOSFODNN7EXAMPLE",
+      "category": "SECRETS_EXPOSURE"
+    },
+    {
+      "rule": "PiiRule",
+      "severity": "CRITICAL",
+      "line": 10,
+      "column": 20,
+      "message": "Hardcoded AWS secret key detected: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+      "description": "AWS secret keys provide full access to AWS resources and should never be hardcoded.",
+      "recommendation": "Use AWS IAM roles, environment variables, or AWS Secrets Manager for credential management.",
+      "match": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+      "category": "SECRETS_EXPOSURE"
+    },
+    {
+      "rule": "PiiRule",
+      "severity": "CRITICAL",
+      "line": 11,
+      "column": 20,
+      "message": "Hardcoded Stripe API key detected: sk_live_1234567890abcdefghijklmnopqrstuvwxyz",
+      "description": "Live Stripe API keys should never be hardcoded as they can process real payments.",
+      "recommendation": "Use environment variables or Stripe's webhook authentication for secure API key management.",
+      "match": "sk_live_1234567890abcdefghijklmnopqrstuvwxyz",
+      "category": "SECRETS_EXPOSURE"
+    },
+    {
+      "rule": "PiiRule",
+      "severity": "CRITICAL",
+      "line": 12,
+      "column": 20,
+      "message": "Hardcoded database URL with credentials detected",
+      "description": "Database connection strings with credentials should not be hardcoded in source code.",
+      "recommendation": "Use environment variables or a secure configuration management system for database credentials.",
+      "match": "postgresql://user:password123@localhost:5432/payments",
+      "category": "SECRETS_EXPOSURE"
+    },
+    {
+      "rule": "PiiRule",
+      "severity": "CRITICAL",
+      "line": 15,
+      "column": 30,
+      "message": "Hardcoded email address detected: support@company.com",
+      "description": "Email addresses should not be hardcoded in source code as they can be used for phishing attacks.",
+      "recommendation": "Use configuration files or environment variables for email addresses.",
+      "match": "support@company.com",
+      "category": "PII_EXPOSURE"
+    },
+    {
+      "rule": "PiiRule",
+      "severity": "CRITICAL",
+      "line": 16,
+      "column": 30,
+      "message": "Hardcoded phone number detected: 1-800-555-0123",
+      "description": "Phone numbers should not be hardcoded in source code as they can be used for social engineering attacks.",
+      "recommendation": "Use configuration files or environment variables for phone numbers.",
+      "match": "1-800-555-0123",
+      "category": "PII_EXPOSURE"
+    },
+    {
+      "rule": "PiiRule",
+      "severity": "CRITICAL",
+      "line": 17,
+      "column": 25,
+      "message": "Hardcoded credit card number detected: 4111-1111-1111-1111",
+      "description": "Credit card numbers should never be hardcoded in source code as they are highly sensitive payment data.",
+      "recommendation": "Remove hardcoded credit card numbers and use tokenization for payment processing.",
+      "match": "4111-1111-1111-1111",
+      "category": "PII_EXPOSURE"
+    },
+    {
+      "rule": "DataFlowRule",
+      "severity": "CRITICAL",
+      "line": 30,
+      "column": 9,
+      "message": "Logging sensitive payment data (credit card number)",
+      "description": "Logging credit card numbers violates PCI DSS requirements and can lead to data breaches.",
+      "recommendation": "Remove credit card logging or mask all but the last 4 digits.",
+      "match": "self.logger.info(f\"Credit card: {payment_info['card_number']}\")",
+      "category": "DATA_EXPOSURE"
+    },
+    {
+      "rule": "DataFlowRule",
+      "severity": "CRITICAL",
+      "line": 31,
+      "column": 9,
+      "message": "Logging CVV code",
+      "description": "CVV codes should never be logged as they are highly sensitive payment verification data.",
+      "recommendation": "Remove CVV logging entirely. CVV should only be used for verification and never stored or logged.",
+      "match": "self.logger.info(f\"CVV: {payment_info['cvv']}\")",
+      "category": "DATA_EXPOSURE"
+    },
+    {
+      "rule": "DataFlowRule",
+      "severity": "CRITICAL",
+      "line": 45,
+      "column": 9,
+      "message": "Saving sensitive transaction data to unencrypted file",
+      "description": "Writing payment data to unencrypted files violates PCI DSS requirements and creates a security risk.",
+      "recommendation": "Encrypt all payment data files or use a secure database with encryption at rest.",
+      "match": "self.save_transaction_to_file(transaction)",
+      "category": "DATA_EXPOSURE"
+    },
+    {
+      "rule": "DataFlowRule",
+      "severity": "HIGH",
+      "line": 48,
+      "column": 9,
+      "message": "Sending sensitive data over HTTP instead of HTTPS",
+      "description": "Payment data should always be transmitted over encrypted HTTPS connections.",
+      "recommendation": "Use HTTPS for all payment-related API calls and verify SSL certificate validation.",
+      "match": "'http://payment-gateway.com/process'",
+      "category": "INSECURE_TRANSMISSION"
+    },
+    {
+      "rule": "DataFlowRule",
+      "severity": "HIGH",
+      "line": 60,
+      "column": 9,
+      "message": "Potential SQL injection vulnerability in query construction",
+      "description": "String formatting in SQL queries can lead to SQL injection attacks.",
+      "recommendation": "Use parameterized queries or an ORM to prevent SQL injection.",
+      "match": "query = f\"SELECT * FROM transactions WHERE customer_email = '{customer_email}'\"",
+      "category": "SQL_INJECTION"
+    },
+    {
+      "rule": "DataFlowRule",
+      "severity": "HIGH",
+      "line": 75,
+      "column": 9,
+      "message": "Logging full credit card number during validation",
+      "description": "Credit card numbers should not be logged during validation processes.",
+      "recommendation": "Log only masked credit card numbers (e.g., ****-****-****-1234) or avoid logging entirely.",
+      "match": "self.logger.info(f\"Validating credit card: {card_number}\")",
+      "category": "DATA_EXPOSURE"
+    },
+    {
+      "rule": "DataFlowRule",
+      "severity": "HIGH",
+      "line": 78,
+      "column": 9,
+      "message": "Storing credit card in memory without encryption",
+      "description": "Credit card data should be encrypted when stored in memory to prevent memory dumps from exposing sensitive data.",
+      "recommendation": "Use secure memory management or avoid storing credit card data in memory.",
+      "match": "self.current_card = card_number",
+      "category": "DATA_EXPOSURE"
+    },
+    {
+      "rule": "DataFlowRule",
+      "severity": "MEDIUM",
+      "line": 95,
+      "column": 9,
+      "message": "Global variable containing sensitive customer data",
+      "description": "Global variables with sensitive data can be accessed by any part of the application.",
+      "recommendation": "Use proper data structures with access controls or encrypt sensitive data in global variables.",
+      "match": "CUSTOMER_DATABASE = {",
+      "category": "DATA_EXPOSURE"
+    }
+  ],
+  "summary": {
+    "totalIssues": 15,
+    "criticalIssues": 10,
+    "highIssues": 4,
+    "mediumIssues": 1,
+    "lowIssues": 0,
+    "complianceViolations": [
+      "PCI DSS Requirement 3 - Protect stored cardholder data",
+      "PCI DSS Requirement 4 - Encrypt transmission of cardholder data",
+      "PCI DSS Requirement 7 - Restrict access to cardholder data",
+      "GDPR Article 32 - Security of processing",
+      "CCPA Section 1798.100 - General duties of businesses"
+    ],
+    "riskScore": 9.8,
+    "riskLevel": "CRITICAL"
+  },
+  "recommendations": [
+    "Immediately remove all hardcoded AWS and Stripe credentials",
+    "Implement proper secrets management using environment variables or cloud-native services",
+    "Remove all credit card logging and implement PCI DSS compliant logging",
+    "Use HTTPS for all payment-related communications",
+    "Implement proper encryption for all payment data storage",
+    "Use parameterized queries to prevent SQL injection",
+    "Implement secure memory management for sensitive data",
+    "Remove hardcoded PII and use secure configuration management",
+    "Conduct a PCI DSS compliance audit",
+    "Implement proper access controls and audit logging for all payment operations"
+  ]
+} 

@@ -1,0 +1,243 @@
+{
+  "scanMetadata": {
+    "filePath": "reports/sample-files/healthcare-api.java",
+    "language": "java",
+    "scanTimestamp": "2024-01-15T10:40:00Z",
+    "toolVersion": "1.0.0",
+    "totalVulnerabilities": 18,
+    "criticalVulnerabilities": 12,
+    "highVulnerabilities": 5,
+    "mediumVulnerabilities": 1
+  },
+  "vulnerabilities": [
+    {
+      "rule": "PiiRule",
+      "severity": "CRITICAL",
+      "line": 13,
+      "column": 35,
+      "message": "Hardcoded database password detected: super_secret_password_123",
+      "description": "Database credentials should not be hardcoded in source code as they can be easily exposed.",
+      "recommendation": "Use environment variables or a secure configuration management system for database credentials.",
+      "match": "super_secret_password_123",
+      "category": "SECRETS_EXPOSURE"
+    },
+    {
+      "rule": "PiiRule",
+      "severity": "CRITICAL",
+      "line": 17,
+      "column": 35,
+      "message": "Hardcoded API key detected: sk_live_healthcare_api_key_123456789",
+      "description": "API keys should be stored in environment variables or secure configuration management systems, not hardcoded in source code.",
+      "recommendation": "Move API keys to environment variables or use a secrets management service.",
+      "match": "sk_live_healthcare_api_key_123456789",
+      "category": "SECRETS_EXPOSURE"
+    },
+    {
+      "rule": "PiiRule",
+      "severity": "CRITICAL",
+      "line": 18,
+      "column": 35,
+      "message": "Hardcoded JWT secret detected: healthcare_jwt_secret_key_should_be_secure",
+      "description": "JWT secrets should be stored securely and not hardcoded in source code.",
+      "recommendation": "Use environment variables or a secure key management service for JWT secrets.",
+      "match": "healthcare_jwt_secret_key_should_be_secure",
+      "category": "SECRETS_EXPOSURE"
+    },
+    {
+      "rule": "PiiRule",
+      "severity": "CRITICAL",
+      "line": 21,
+      "column": 35,
+      "message": "Hardcoded email address detected: admin@healthcare.com",
+      "description": "Email addresses should not be hardcoded in source code as they can be used for phishing attacks.",
+      "recommendation": "Use configuration files or environment variables for email addresses.",
+      "match": "admin@healthcare.com",
+      "category": "PII_EXPOSURE"
+    },
+    {
+      "rule": "PiiRule",
+      "severity": "CRITICAL",
+      "line": 22,
+      "column": 35,
+      "message": "Hardcoded phone number detected: 555-123-4567",
+      "description": "Phone numbers should not be hardcoded in source code as they can be used for social engineering attacks.",
+      "recommendation": "Use configuration files or environment variables for phone numbers.",
+      "match": "555-123-4567",
+      "category": "PII_EXPOSURE"
+    },
+    {
+      "rule": "PiiRule",
+      "severity": "CRITICAL",
+      "line": 23,
+      "column": 40,
+      "message": "Hardcoded SSN detected: 123-45-6789",
+      "description": "Social Security Numbers should never be hardcoded in source code as they are highly sensitive PII.",
+      "recommendation": "Remove hardcoded SSNs and use secure data storage with proper encryption.",
+      "match": "123-45-6789",
+      "category": "PII_EXPOSURE"
+    },
+    {
+      "rule": "DataFlowRule",
+      "severity": "CRITICAL",
+      "line": 45,
+      "column": 13,
+      "message": "Logging SSN during patient object creation",
+      "description": "Logging SSNs violates HIPAA requirements and can lead to data breaches.",
+      "recommendation": "Remove SSN logging entirely or use proper data masking.",
+      "match": "System.out.println(\"Creating patient with SSN: \" + ssn)",
+      "category": "DATA_EXPOSURE"
+    },
+    {
+      "rule": "DataFlowRule",
+      "severity": "CRITICAL",
+      "line": 55,
+      "column": 9,
+      "message": "Logging sensitive patient data (SSN)",
+      "description": "Logging SSNs violates HIPAA requirements and can lead to data breaches.",
+      "recommendation": "Remove SSN logging or implement proper data masking.",
+      "match": "logger.info(\"Patient SSN: \" + ssn)",
+      "category": "DATA_EXPOSURE"
+    },
+    {
+      "rule": "DataFlowRule",
+      "severity": "CRITICAL",
+      "line": 56,
+      "column": 9,
+      "message": "Logging patient date of birth",
+      "description": "Logging patient DOB can violate HIPAA requirements if not properly secured.",
+      "recommendation": "Remove DOB logging or implement proper data masking.",
+      "match": "logger.info(\"Patient DOB: \" + dateOfBirth)",
+      "category": "DATA_EXPOSURE"
+    },
+    {
+      "rule": "DataFlowRule",
+      "severity": "CRITICAL",
+      "line": 57,
+      "column": 9,
+      "message": "Logging patient phone number",
+      "description": "Logging patient phone numbers can violate HIPAA requirements if not properly secured.",
+      "recommendation": "Remove phone number logging or implement proper data masking.",
+      "match": "logger.info(\"Patient phone: \" + phoneNumber)",
+      "category": "DATA_EXPOSURE"
+    },
+    {
+      "rule": "DataFlowRule",
+      "severity": "CRITICAL",
+      "line": 65,
+      "column": 9,
+      "message": "Writing patient data to unencrypted file",
+      "description": "Writing PHI to unencrypted files violates HIPAA Security Rule requirements.",
+      "recommendation": "Encrypt all files containing PHI or use a secure database with encryption at rest.",
+      "match": "savePatientToFile(patient)",
+      "category": "DATA_EXPOSURE"
+    },
+    {
+      "rule": "DataFlowRule",
+      "severity": "CRITICAL",
+      "line": 75,
+      "column": 17,
+      "message": "Returning full patient data including SSN and PHI without access controls",
+      "description": "Exposing full patient data without proper access controls violates HIPAA requirements.",
+      "recommendation": "Implement proper access controls and data masking for sensitive PHI.",
+      "match": "return patient",
+      "category": "DATA_EXPOSURE"
+    },
+    {
+      "rule": "DataFlowRule",
+      "severity": "HIGH",
+      "line": 85,
+      "column": 9,
+      "message": "Potential SQL injection vulnerability in query construction",
+      "description": "String concatenation in SQL queries can lead to SQL injection attacks.",
+      "recommendation": "Use parameterized queries or prepared statements to prevent SQL injection.",
+      "match": "String query = \"SELECT * FROM patients WHERE first_name = '\" + name + \"' OR last_name = '\" + name + \"'\";",
+      "category": "SQL_INJECTION"
+    },
+    {
+      "rule": "DataFlowRule",
+      "severity": "HIGH",
+      "line": 95,
+      "column": 9,
+      "message": "Logging sensitive medical data (medical history)",
+      "description": "Logging medical history violates HIPAA requirements and can lead to data breaches.",
+      "recommendation": "Remove medical data logging or implement proper data masking.",
+      "match": "logger.info(\"Updated medical history for patient \" + patientId + \": \" + medicalHistory)",
+      "category": "DATA_EXPOSURE"
+    },
+    {
+      "rule": "DataFlowRule",
+      "severity": "HIGH",
+      "line": 96,
+      "column": 9,
+      "message": "Logging sensitive medical data (diagnosis)",
+      "description": "Logging patient diagnosis violates HIPAA requirements and can lead to data breaches.",
+      "recommendation": "Remove diagnosis logging or implement proper data masking.",
+      "match": "logger.info(\"Updated diagnosis for patient \" + patientId + \": \" + diagnosis)",
+      "category": "DATA_EXPOSURE"
+    },
+    {
+      "rule": "DataFlowRule",
+      "severity": "HIGH",
+      "line": 115,
+      "column": 13,
+      "message": "Exposing SSN in API response without masking",
+      "description": "SSNs should be masked or excluded from API responses to prevent data exposure.",
+      "recommendation": "Mask SSNs (e.g., ***-**-6789) or exclude them from responses unless absolutely necessary.",
+      "match": "summary.put(\"ssn\", patient.ssn)",
+      "category": "DATA_EXPOSURE"
+    },
+    {
+      "rule": "DataFlowRule",
+      "severity": "HIGH",
+      "line": 120,
+      "column": 13,
+      "message": "Exposing PHI data in API response without proper controls",
+      "description": "PHI data should be protected and only exposed to authorized users with proper access controls.",
+      "recommendation": "Implement proper access controls and data masking for all PHI data.",
+      "match": "summary.put(\"medicalHistory\", patient.medicalHistory)",
+      "category": "DATA_EXPOSURE"
+    },
+    {
+      "rule": "EncryptionRule",
+      "severity": "MEDIUM",
+      "line": 130,
+      "column": 9,
+      "message": "Using weak encryption algorithm (MD5) for sensitive data",
+      "description": "MD5 is cryptographically broken and should not be used for any security purposes.",
+      "recommendation": "Use SHA-256 or better for hashing, and AES-256-GCM for encryption.",
+      "match": "java.security.MessageDigest.getInstance(\"MD5\")",
+      "category": "WEAK_ENCRYPTION"
+    }
+  ],
+  "summary": {
+    "totalIssues": 18,
+    "criticalIssues": 12,
+    "highIssues": 5,
+    "mediumIssues": 1,
+    "lowIssues": 0,
+    "complianceViolations": [
+      "HIPAA Security Rule - Administrative safeguards",
+      "HIPAA Security Rule - Physical safeguards",
+      "HIPAA Security Rule - Technical safeguards",
+      "HIPAA Privacy Rule - Uses and disclosures",
+      "GDPR Article 32 - Security of processing",
+      "CCPA Section 1798.100 - General duties of businesses"
+    ],
+    "riskScore": 9.9,
+    "riskLevel": "CRITICAL"
+  },
+  "recommendations": [
+    "Immediately remove all hardcoded credentials and secrets",
+    "Implement proper secrets management using environment variables or a vault service",
+    "Remove all PHI logging and implement HIPAA-compliant audit logging",
+    "Implement proper encryption for all PHI data storage and transmission",
+    "Use parameterized queries to prevent SQL injection",
+    "Implement proper access controls and role-based permissions for PHI",
+    "Use modern encryption algorithms (AES-256-GCM) instead of MD5",
+    "Implement proper data masking for all PHI in API responses",
+    "Conduct a comprehensive HIPAA compliance audit",
+    "Implement proper audit trails for all PHI access and modifications",
+    "Use secure file storage with encryption at rest for all PHI data",
+    "Implement proper error handling that doesn't expose sensitive information"
+  ]
+} 

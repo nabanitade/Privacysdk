@@ -1,0 +1,178 @@
+{
+  "scanSummary": {
+    "scanTimestamp": "2024-01-15T10:45:00Z",
+    "toolVersion": "1.0.0",
+    "totalFilesScanned": 3,
+    "totalVulnerabilities": 45,
+    "criticalVulnerabilities": 30,
+    "highVulnerabilities": 12,
+    "mediumVulnerabilities": 3,
+    "lowVulnerabilities": 0,
+    "averageRiskScore": 9.6,
+    "overallRiskLevel": "CRITICAL"
+  },
+  "filesScanned": [
+    {
+      "filePath": "reports/sample-files/user-service.js",
+      "language": "javascript",
+      "totalIssues": 12,
+      "criticalIssues": 8,
+      "highIssues": 3,
+      "mediumIssues": 1,
+      "riskScore": 9.2,
+      "riskLevel": "CRITICAL"
+    },
+    {
+      "filePath": "reports/sample-files/payment-processor.py",
+      "language": "python",
+      "totalIssues": 15,
+      "criticalIssues": 10,
+      "highIssues": 4,
+      "mediumIssues": 1,
+      "riskScore": 9.8,
+      "riskLevel": "CRITICAL"
+    },
+    {
+      "filePath": "reports/sample-files/healthcare-api.java",
+      "language": "java",
+      "totalIssues": 18,
+      "criticalIssues": 12,
+      "highIssues": 5,
+      "mediumIssues": 1,
+      "riskScore": 9.9,
+      "riskLevel": "CRITICAL"
+    }
+  ],
+  "vulnerabilityBreakdown": {
+    "byCategory": {
+      "SECRETS_EXPOSURE": 15,
+      "PII_EXPOSURE": 12,
+      "DATA_EXPOSURE": 10,
+      "SQL_INJECTION": 3,
+      "WEAK_ENCRYPTION": 2,
+      "INSECURE_TRANSMISSION": 1,
+      "OTHER": 2
+    },
+    "byRule": {
+      "PiiRule": 27,
+      "DataFlowRule": 15,
+      "EncryptionRule": 3
+    },
+    "bySeverity": {
+      "CRITICAL": 30,
+      "HIGH": 12,
+      "MEDIUM": 3,
+      "LOW": 0
+    }
+  },
+  "complianceViolations": {
+    "HIPAA": [
+      "Security Rule - Administrative safeguards",
+      "Security Rule - Physical safeguards", 
+      "Security Rule - Technical safeguards",
+      "Privacy Rule - Uses and disclosures"
+    ],
+    "PCI_DSS": [
+      "Requirement 3 - Protect stored cardholder data",
+      "Requirement 4 - Encrypt transmission of cardholder data",
+      "Requirement 7 - Restrict access to cardholder data"
+    ],
+    "GDPR": [
+      "Article 32 - Security of processing",
+      "Article 25 - Data protection by design and by default"
+    ],
+    "CCPA": [
+      "Section 1798.100 - General duties of businesses",
+      "Section 1798.150 - Civil action for data breaches"
+    ]
+  },
+  "detectedPatterns": {
+    "hardcodedSecrets": [
+      "API keys (Stripe, AWS, custom)",
+      "Database passwords",
+      "JWT secrets",
+      "AWS access/secret keys"
+    ],
+    "hardcodedPII": [
+      "Email addresses",
+      "Phone numbers", 
+      "Social Security Numbers",
+      "Credit card numbers",
+      "Patient medical data"
+    ],
+    "dataExposure": [
+      "Logging sensitive data to console",
+      "Writing sensitive data to unencrypted files",
+      "Exposing sensitive data in API responses",
+      "Storing sensitive data in memory without encryption"
+    ],
+    "securityIssues": [
+      "SQL injection vulnerabilities",
+      "Weak encryption algorithms (MD5, AES-128-ECB)",
+      "HTTP instead of HTTPS for sensitive data transmission"
+    ]
+  },
+  "toolCapabilities": {
+    "supportedLanguages": [
+      "JavaScript/TypeScript",
+      "Python",
+      "Java",
+      "C#",
+      "Go",
+      "PHP",
+      "Ruby",
+      "Rust",
+      "Scala",
+      "Swift",
+      "Kotlin"
+    ],
+    "detectionRules": [
+      "PiiRule - Detects hardcoded PII and sensitive data",
+      "DataFlowRule - Tracks sensitive data flow and exposure",
+      "EncryptionRule - Identifies weak encryption practices",
+      "ConsentRule - Checks for proper consent mechanisms",
+      "PrivacyPolicyRule - Validates privacy policy compliance",
+      "AdvancedPrivacyRule - Advanced privacy violation detection",
+      "AiPrivacyRule - AI-specific privacy concerns",
+      "DeveloperGuidanceRule - Provides developer guidance"
+    ],
+    "complianceFrameworks": [
+      "HIPAA (Healthcare)",
+      "PCI DSS (Payment Processing)",
+      "GDPR (European Privacy)",
+      "CCPA (California Privacy)",
+      "SOX (Financial Reporting)",
+      "GLBA (Financial Privacy)"
+    ]
+  },
+  "recommendations": {
+    "immediate": [
+      "Remove all hardcoded secrets and credentials from source code",
+      "Implement proper secrets management using environment variables or vault services",
+      "Remove or mask all PII from logs and console output",
+      "Implement proper encryption for all sensitive data storage and transmission"
+    ],
+    "shortTerm": [
+      "Use parameterized queries to prevent SQL injection",
+      "Implement proper access controls and role-based permissions",
+      "Use modern encryption algorithms (AES-256-GCM) instead of deprecated ones",
+      "Implement proper data masking for all sensitive data in API responses"
+    ],
+    "longTerm": [
+      "Conduct comprehensive compliance audits (HIPAA, PCI DSS, GDPR)",
+      "Implement proper audit trails for all sensitive data access",
+      "Use secure file storage with encryption at rest",
+      "Implement proper error handling that doesn't expose sensitive information",
+      "Establish regular security training for development teams"
+    ]
+  },
+  "toolBenefits": {
+    "automatedDetection": "Automatically scans code for privacy and security vulnerabilities",
+    "multiLanguageSupport": "Supports 11+ programming languages",
+    "complianceAware": "Understands and reports on multiple compliance frameworks",
+    "detailedReporting": "Provides detailed reports with line numbers, severity, and recommendations",
+    "integrationReady": "Can be integrated into CI/CD pipelines and development workflows",
+    "realTimeScanning": "Provides real-time feedback during development",
+    "comprehensiveCoverage": "Detects a wide range of privacy and security issues"
+  }
+} 
